@@ -34,7 +34,7 @@ CREATE TABLE staff(
     position VARCHAR CHECK (position IN('Trainer','Manager','Receptionist','Maintenance')),
     hire_date DATE, 
     location_id VARCHAR, 
-    FOREIGN KEY (location_id) REFERENCES locations(location_id)
+    FOREIGN KEY (location_id) REFERENCES locations(location_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS equipment;
@@ -46,7 +46,7 @@ CREATE TABLE equipment(
     last_maintenance_date DATE, 
     next_maintenance_date DATE,
     location_id VARCHAR,
-    FOREIGN KEY (location_id) REFERENCES locations(location_id)
+    FOREIGN KEY (location_id) REFERENCES locations(location_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS classes;
@@ -57,7 +57,7 @@ CREATE TABLE classes(
     capacity INTEGER,
     duration INTEGER,  
     location_id VARCHAR,
-    FOREIGN KEY (location_id) REFERENCES locations(location_id)
+    FOREIGN KEY (location_id) REFERENCES locations(location_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS class_schedule;
@@ -67,8 +67,8 @@ CREATE TABLE class_schedule(
     staff_id VARCHAR,
     start_time TIME, 
     end_time TIME,
-    FOREIGN KEY (staff_id) REFERENCES staff(staff_id)
-    FOREIGN KEY (class_id) REFERENCES class(class_id)
+    FOREIGN KEY (staff_id) REFERENCES staff(staff_id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (class_id) REFERENCES class(class_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS memberships;
@@ -79,7 +79,7 @@ CREATE TABLE memberships(
     start_date DATE, 
     end_date DATE,
     status CHECK (status IN ('Active','Inactive')),
-    FOREIGN KEY(member_id) REFERENCES member(member_id)
+    FOREIGN KEY(member_id) REFERENCES member(member_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS attendance;
@@ -89,8 +89,8 @@ CREATE TABLE attendance(
     location_id,
     check_in_time TIME, 
     check_out_time TIME,
-    FOREIGN KEY(location_id) REFERENCES location(location_id),
-    FOREIGN KEY(member_id) REFERENCES member(member_id)
+    FOREIGN KEY(location_id) REFERENCES location(location_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY(member_id) REFERENCES member(member_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS class_attendance;
@@ -98,8 +98,9 @@ CREATE TABLE class_attendance(
     class_attendance_id INTEGER PRIMARY KEY NOT NULL,
     schedule_id VARCHAR,
     member_id VARCHAR,
-    FOREIGN KEY(member_id) REFERENCES member(member_id),    
-    FOREIGN KEY(schedule_id) REFERENCES schedule(schedule_id)
+    attendance_status VARCHAR CHECK(attendance_status IN('Registered', 'Attended', 'Unattended')),
+    FOREIGN KEY(member_id) REFERENCES member(member_id) ON DELETE CASCADE ON UPDATE CASCADE,    
+    FOREIGN KEY(schedule_id) REFERENCES schedule(schedule_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS payments;
@@ -110,7 +111,7 @@ CREATE TABLE payments(
     payment_date TIME,
     payment_method CHECK (payment_method IN ('Credit Card', 'Bank Transfer', 'PayPal','Cash')),
     payment_type CHECK (payment_type IN ('Monthly membership fee', 'Day pass')),
-    FOREIGN KEY(member_id) REFERENCES member(member_id)
+    FOREIGN KEY(member_id) REFERENCES member(member_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS personal_training_sessions;
@@ -122,8 +123,8 @@ CREATE TABLE personal_training_sessions(
     start_time TIME,
     end_time TIME,
     notes VARCHAR,
-    FOREIGN KEY(staff_id) REFERENCES staff(staff_id),    
-    FOREIGN KEY(member_id) REFERENCES member(member_id)
+    FOREIGN KEY(staff_id) REFERENCES staff(staff_id) ON DELETE CASCADE ON UPDATE CASCADE,    
+    FOREIGN KEY(member_id) REFERENCES member(member_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS member_health_metrics;
@@ -135,14 +136,15 @@ CREATE TABLE member_health_metrics(
     body_fat_percentage REAL,
     muscle_mass REAL,
     bmi REAL,
-    FOREIGN KEY(member_id) REFERENCES member(member_id)
+    FOREIGN KEY(member_id) REFERENCES member(member_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS equipment_maintence_log;
-CREATE TABLE equipment_maintence_log(
+DROP TABLE IF EXISTS equipment_maintenance_log;
+CREATE TABLE equipment_maintenance_log(
     log_id VARCHAR PRIMARY KEY NOT NULL,
     equipment_id VARCHAR,
     maintenance_date DATE,
+    staff_id VARCHAR,
     description VARCHAR,
-    FOREIGN KEY(equipment_id) REFERENCES equipment(equipment_id)
+    FOREIGN KEY(equipment_id) REFERENCES equipment(equipment_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
