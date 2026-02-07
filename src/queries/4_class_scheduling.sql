@@ -19,7 +19,8 @@ ON class_schedule.schedule_id=class_attendance.schedule_id
 WHERE start_time LIKE '2025-02-01%' 
 GROUP BY class_schedule.schedule_id
 -- 4.3 
-
+INSERT INTO class_attendance(class_attendance_id,schedule_id,member_id,attendance_status)
+VALUES ()
 
 -- 4.4 
 
