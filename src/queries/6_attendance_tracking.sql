@@ -11,6 +11,7 @@ FROM attendance
 JOIN members
 ON attendance.member_id=members.member_id
 WHERE attendance.member_id=5;
+--complete this 
 
 -- 6.3 
 
