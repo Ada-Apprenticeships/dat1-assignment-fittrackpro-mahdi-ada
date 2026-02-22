@@ -28,9 +28,9 @@ GROUP BY day_of_week
 ORDER BY visit_count DESC
 LIMIT 1;
 -- 6.4 
-SELECT locations.name as location_name, COUNT(attendance.location_id) as avg_daily_attendance
+SELECT locations.name AS location_name,COUNT(attendance.location_id)/ (SELECT COUNT(DISTINCT DATE(check_in_time)) FROM attendance) AS avg_daily_attendance --Had to do a sub query due to the maths error that would occur when doing 0/0 for Suburban Wellness 
 FROM locations 
 LEFT JOIN attendance
 ON locations.location_id=attendance.location_id
-GROUP BY locations 
-
+GROUP BY locations.name;
+--get help on this the output is giving 0 and 0 which shouldn't be the case 
