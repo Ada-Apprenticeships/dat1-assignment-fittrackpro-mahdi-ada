@@ -13,5 +13,5 @@ JOIN personal_training_session
 ON staff.staff_id=personal_training_session.staff_id
 WHERE session_date BETWEEN '2025-01-20' AND DATE('2025-01-20','+30 days') AND session_count>=1
 GROUP BY trainer_id
+
 --finish this off
- 
