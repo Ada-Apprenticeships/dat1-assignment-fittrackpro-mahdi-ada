@@ -13,7 +13,7 @@ WHERE member_id=5;
 
 
 -- 1.3
-SELECT COUNT(*)
+SELECT COUNT(*) AS total_members
 FROM members;
 
 
@@ -44,6 +44,7 @@ ON class_attendance.member_id=members.member_id
 WHERE attendance_status='Attended' 
 GROUP BY class_attendance.member_id
 HAVING Count>=2;
+--check this its outputting 2 when it should be 1
 
  
 
