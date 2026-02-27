@@ -22,6 +22,7 @@ SELECT members.member_id,first_name,last_name, COUNT(class_attendance.member_id)
 FROM class_attendance
 JOIN members
 ON class_attendance.member_id=members.member_id
+WHERE class_attendance.attendance_status = 'Registered'
 GROUP BY members.member_id
 ORDER BY registration_count DESC
 LIMIT 1;
@@ -32,20 +33,18 @@ SELECT members.member_id,first_name,last_name, COUNT(class_attendance.member_id)
 FROM class_attendance
 JOIN members
 ON class_attendance.member_id=members.member_id
+WHERE class_attendance.attendance_status = 'Registered'
 GROUP BY members.member_id
 ORDER BY registration_count ASC 
 LIMIT 1;
 
 -- 1.6
-SELECT COUNT(class_attendance.member_id) AS Count 
-FROM class_attendance
-JOIN members
-ON class_attendance.member_id=members.member_id
-WHERE attendance_status= 'Attended' 
-GROUP BY class_attendance.member_id
-HAVING Count>=2;
---check this its outputting 2 when it should be 1
-
- 
-
+SELECT COUNT(*) AS Count
+FROM (
+    SELECT member_id
+    FROM class_attendance
+    WHERE attendance_status ='Attended'
+    GROUP BY member_id
+    HAVING COUNT(class_attendance_id)>=2
+);
 
