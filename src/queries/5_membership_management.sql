@@ -7,6 +7,7 @@ FROM memberships
 LEFT JOIN members
 ON memberships.member_id=members.member_id
 WHERE memberships.status='Active';
+--i checked my code with other apprentices we got the same/similiar code but mine is not getting the desired output
 
 -- 5.2 
 SELECT memberships.type AS membership_type,AVG((strftime('%s', attendance.check_out_time)-strftime('%s',attendance.check_in_time))/60) AS avg_visit_duration_minutes
@@ -22,4 +23,3 @@ FROM memberships
 LEFT JOIN members
 ON memberships.member_id=members.member_id
 WHERE memberships.end_date LIKE '2025%';
---there is something wrong with the member_id stuff--> try locally if it still doesnt work contact dan
